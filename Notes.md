@@ -1137,3 +1137,61 @@ ListView.builder(
         child: ExpenseItem(expense: expenses[index]),
       ),
     );
+
+-   @override
+  Widget build(BuildContext context) {
+    Widget mainContent = Center(child: Text('No Expenses Found. Start adding'));
+    return Scaffold( ...
+
+-  ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Expense Deleted')));
+
+- ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(label: 'Undo', onPressed: () {}),
+      ),
+    );
+    action kısmında eğer "undo" butonuna basılırsa onPressed çağrılacak.
+
+
+- 
+ void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(label: 'Undo', onPressed: () {}),
+      ),
+    );
+  }
+
+- 
+void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              setState(() {
+                _registeredExpenses
+                    .insert(expenseIndex,expense); // cıkardıgını tekrar ekliyorsun
+              });
+            }),
+      ),
+    );
+  }
+  burada undo butonuna basınca cıkardıgımız indextekini, aynı indexe tekrar ekliyor. Add fonksiyonu da kullanabilirdik 
+  ancak o zaman cıkardıgımız yere ekleyemezdik.
+
+  
